@@ -282,6 +282,128 @@ Apply multipliers to base distribution:
 
 ---
 
+## Retailer Capture Rates (Customer Profile Generation)
+
+### Conceptual Model
+
+**Problem**: A Waitrose and Lidl next to each other have the SAME geographic catchment but DIFFERENT customer profiles.
+
+**Solution**: Two-step calculation:
+1. **Geographic Catchment** (`demographics`): Who lives in the area (unchanged)
+2. **Retailer Capture Rates**: What % of each segment chooses to shop at this retailer
+3. **Customer Profile** = Catchment × Capture Rates
+
+### Example Calculation
+
+**Geographic Catchment** (50,000 people):
+- 20% Premium Craft Enthusiasts = 10,000 people
+- 10% Value-Driven Households = 5,000 people
+
+**Waitrose Capture Rates**:
+- Premium: 0.65 (captures 65%)
+- Value: 0.08 (captures 8%)
+
+**Waitrose Customer Profile**:
+- Premium captured: 10,000 × 0.65 = 6,500
+- Value captured: 5,000 × 0.08 = 400
+- Total shoppers: ~15,000
+- Premium %: 6,500 / 15,000 = **43%**
+- Value %: 400 / 15,000 = **3%**
+
+**Aldi Capture Rates** (same catchment):
+- Premium: 0.10
+- Value: 0.70
+
+**Aldi Customer Profile**:
+- Premium: **7%**
+- Value: **23%**
+
+### Base Retailer Capture Rates
+
+These reflect brand positioning and typical customer profiles:
+
+| Segment | Waitrose | M&S Food | Sainsbury's | Tesco | Asda | Morrisons | Aldi | Lidl | Iceland | Convenience Base |
+|---------|----------|----------|-------------|-------|------|-----------|------|------|---------|------------------|
+| Premium Craft Enthusiasts | 0.65 | 0.60 | 0.50 | 0.40 | 0.20 | 0.20 | 0.10 | 0.10 | 0.15 | 0.25 |
+| Mainstream Family Buyers | 0.35 | 0.40 | 0.50 | 0.55 | 0.50 | 0.50 | 0.45 | 0.45 | 0.50 | 0.30 |
+| Value-Driven Households | 0.08 | 0.10 | 0.30 | 0.45 | 0.60 | 0.60 | 0.70 | 0.70 | 0.65 | 0.25 |
+| Social Party Hosts | 0.40 | 0.35 | 0.45 | 0.45 | 0.40 | 0.40 | 0.35 | 0.35 | 0.40 | 0.30 |
+| Traditional Real Ale Fans | 0.30 | 0.25 | 0.40 | 0.45 | 0.40 | 0.40 | 0.25 | 0.25 | 0.35 | 0.30 |
+| Student Budget Shoppers | 0.05 | 0.08 | 0.25 | 0.40 | 0.55 | 0.55 | 0.75 | 0.75 | 0.60 | 0.35 |
+| Convenience On-The-Go | 0.25 | 0.30 | 0.30 | 0.35 | 0.25 | 0.25 | 0.15 | 0.15 | 0.20 | 0.75 |
+| Occasional Special Buyers | 0.50 | 0.55 | 0.45 | 0.40 | 0.30 | 0.30 | 0.20 | 0.20 | 0.25 | 0.25 |
+| Health-Conscious Moderates | 0.60 | 0.65 | 0.55 | 0.45 | 0.35 | 0.35 | 0.25 | 0.25 | 0.30 | 0.30 |
+| Sports & Social Drinkers | 0.30 | 0.28 | 0.45 | 0.50 | 0.45 | 0.45 | 0.40 | 0.40 | 0.45 | 0.40 |
+
+**Notes**:
+- Waitrose/M&S: High capture of Premium, Health-Conscious, Occasional
+- Aldi/Lidl: Very high capture of Value, Students
+- Tesco/Sainsbury's: Balanced mainstream
+- Asda/Morrisons: Value-leaning mainstream
+- Convenience Base: Very high Convenience On-The-Go (0.75)
+
+### Format Modifiers
+
+These are **multiplied** by the base retailer rates to account for format differences:
+
+| Segment | Hypermarket | Supermarket | Convenience | Discounter |
+|---------|-------------|-------------|-------------|------------|
+| Premium Craft Enthusiasts | 0.90 | 1.00 | 0.60 | 1.00 |
+| Mainstream Family Buyers | 1.40 | 1.00 | 0.40 | 1.00 |
+| Value-Driven Households | 1.30 | 1.00 | 0.50 | 1.00 |
+| Social Party Hosts | 1.10 | 1.00 | 0.70 | 1.00 |
+| Traditional Real Ale Fans | 1.05 | 1.00 | 0.65 | 1.00 |
+| Student Budget Shoppers | 1.20 | 1.00 | 0.70 | 1.00 |
+| Convenience On-The-Go | 0.30 | 1.00 | 2.50 | 1.00 |
+| Occasional Special Buyers | 0.95 | 1.00 | 0.60 | 1.00 |
+| Health-Conscious Moderates | 1.00 | 1.00 | 0.60 | 1.00 |
+| Sports & Social Drinkers | 1.15 | 1.00 | 0.80 | 1.00 |
+
+**Rationale**:
+- **Hypermarket**: Big weekly shop → boost Families, Value (bulk buying), reduce Convenience
+- **Supermarket**: Baseline (1.00 for most)
+- **Convenience**: Quick stop mission → massive boost to Convenience On-The-Go (2.5×), reduce Families/Value
+- **Discounter**: No modifier (already extreme base rates)
+
+### Combined Calculation Example
+
+**Tesco Express (Convenience)**:
+- Base Tesco rate for Families: 0.55
+- Convenience modifier for Families: 0.40
+- **Final capture rate**: 0.55 × 0.40 = **0.22**
+
+**Tesco Extra (Hypermarket)**:
+- Base Tesco rate for Families: 0.55
+- Hypermarket modifier for Families: 1.40
+- **Final capture rate**: 0.55 × 1.40 = **0.77**
+
+**Waitrose Convenience**:
+- Base Waitrose rate for Convenience On-The-Go: 0.25
+- Convenience modifier: 2.50
+- **Final capture rate**: 0.25 × 2.50 = **0.625**
+
+### Retailer-Format Combinations in Dataset
+
+| Retailer | Formats Available | Store Count |
+|----------|-------------------|-------------|
+| Tesco | Hypermarket, Supermarket, Convenience | 94 stores |
+| Sainsbury's | Supermarket, Convenience | 49 stores |
+| Waitrose | Supermarket, Convenience | 38 stores |
+| M&S Food | Supermarket, Convenience | 41 stores |
+| Asda | Hypermarket, Convenience | 16 stores |
+| Morrisons | Supermarket, Convenience | 28 stores |
+| Aldi | Discounter | 30 stores |
+| Lidl | Discounter | 20 stores |
+| Iceland | Supermarket | 25 stores |
+| Co-op | Convenience | 26 stores |
+| SPAR | Convenience | 22 stores |
+| Nisa | Convenience | 63 stores |
+| Premier | Convenience | 33 stores |
+| Costcutter | Convenience | 26 stores |
+| BP, EG Group, Shell, Esso, MFG | Convenience (Forecourt) | 24 stores |
+
+---
+
 ## Technical Notes
 
 ### Seasonality
