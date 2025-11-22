@@ -19,6 +19,8 @@ import type {
   Occasion
 } from '@/types/demo-data';
 
+import { SEGMENT_OCCASION_PREFERENCES, OCCASIONS } from '@/types/demo-data';
+
 // Type assertions (Next.js json imports are typed as 'any')
 const stores = storesData as unknown as Store[];
 const categoryPerf = categoryPerfData as unknown as CategoryPerformance;
@@ -162,32 +164,82 @@ export function getMeasureValue(
 /**
  * Get usage occasion demand vs coverage
  * (Used in UsageOccasionChart)
+ *
+ * DEMAND: What usage occasions does the catchment population need?
+ * - Based on store's catchment demographics × segment occasion preferences
+ *
+ * COVERAGE: What usage occasions does the current assortment serve?
+ * - Based on choice_share_by_occasion (aggregate brand shares per occasion)
  */
 export function getUsageOccasionData(
   storeId: string
 ): Array<{ label: string; demand: number; coverage: number }> {
+  const store = storeById.get(storeId);
   const storePerf = perfByStoreId.get(storeId);
-  if (!storePerf) return [];
+  if (!store || !storePerf) return [];
 
-  // Calculate demand from occasion breakdown
-  const occasions = storePerf.choice_share_by_occasion || {};
+  // STEP 1: Calculate DEMAND based on customer profile (not geographic catchment)
+  // Use customerProfile which reflects retailer/format capture rates
+  const demandByOccasion: Record<string, number> = {};
 
-  return Object.keys(occasions).map(occasion => {
-    const brandShares = occasions[occasion];
+  // Initialize all occasions to 0
+  OCCASIONS.forEach(occasion => {
+    demandByOccasion[occasion] = 0;
+  });
 
-    // "Demand" = total choice share for occasion (sum of all brands)
-    const demand = Object.values(brandShares).reduce((sum, val) => sum + val, 0);
+  // Use customerProfile if available, fallback to demographics
+  const profile = store.catchmentPopulation.customerProfile || store.catchmentPopulation.demographics;
 
-    // "Coverage" = how well we're covering this occasion with current SKUs
-    // For demo purposes, add some variance to make it interesting
-    // In reality, this would come from SKU availability data
-    const variance = 0.7 + (Math.random() * 0.5); // 0.7 to 1.2
-    const coverage = demand * variance;
+  // For each segment in the customer profile
+  profile.forEach(demo => {
+    const segmentName = demo.segment as any;
+    const segmentPercentage = demo.percentage; // e.g., 10% of customers
 
+    // Get this segment's occasion preferences
+    const occasionPrefs = SEGMENT_OCCASION_PREFERENCES[segmentName];
+    if (!occasionPrefs) return;
+
+    // Contribute to each occasion based on segment % × occasion preference
+    Object.entries(occasionPrefs).forEach(([occasion, preference]) => {
+      // E.g., 10% students × 23% house party preference = 2.3 points
+      demandByOccasion[occasion] += (segmentPercentage * preference) / 100;
+    });
+  });
+
+  // STEP 2: Calculate COVERAGE from SKU availability
+  // Coverage = how well the store's assortment serves each occasion
+  const coverageByOccasion: Record<string, number> = {};
+
+  // Get all SKUs and filter for this store
+  const allSKUs = shopperResp.skus;
+  const storeAvailableSKUs = allSKUs.filter(sku =>
+    sku.available_in_stores?.includes(storeId)
+  );
+
+  // For each occasion, calculate total potential (all SKUs) and store coverage (available SKUs)
+  OCCASIONS.forEach(occasion => {
+    // Total potential = sum of all SKUs' occasion_choice_share for this occasion
+    const totalPotential = allSKUs.reduce((sum, sku) => {
+      return sum + (sku.occasion_choice_share[occasion] || 0);
+    }, 0);
+
+    // Store coverage = sum of available SKUs' occasion_choice_share for this occasion
+    const storeCoverage = storeAvailableSKUs.reduce((sum, sku) => {
+      return sum + (sku.occasion_choice_share[occasion] || 0);
+    }, 0);
+
+    // Coverage percentage = (store coverage / total potential) × 100
+    coverageByOccasion[occasion] = totalPotential > 0
+      ? (storeCoverage / totalPotential) * 100
+      : 0;
+  });
+
+  // STEP 3: Combine demand and coverage
+  return OCCASIONS.map(occasion => {
     return {
       label: occasion,
-      demand: Math.round(demand),
-      coverage: Math.round(coverage)
+      demand: Math.round(demandByOccasion[occasion] || 0),
+      coverage: Math.round(coverageByOccasion[occasion] || 0)
     };
   });
 }
@@ -242,7 +294,7 @@ export function getSKUsByBrand(brand: string): SKU[] {
  * Get SKUs available in a specific store
  */
 export function getSKUsAvailableInStore(storeId: string): SKU[] {
-  return shopperResp.skus.filter(sku => sku.available_stores.includes(storeId));
+  return shopperResp.skus.filter(sku => sku.available_in_stores.includes(storeId));
 }
 
 /**
