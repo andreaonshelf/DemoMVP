@@ -202,129 +202,130 @@ export const OCCASION_COLORS: Record<string, string> = {
   "Having friends over": "#10B981"     // Emerald green
 };
 
-// Segment-to-Occasion preference mapping (STRONG differentiation for variability)
-// Each segment has preferences across ALL occasions, totaling 100%
+// Segment-to-Occasion baseline mapping (GLOBAL and STABLE)
+// Each segment has realistic preferences across ALL occasions, totaling 100%
 // Reflects winter/fall seasonality (Oct-Nov): lower barbecue/picnic, higher indoor occasions
-// INTENTIONALLY VARIED to create visible differences across store catchments
-export const SEGMENT_OCCASION_PREFERENCES: Record<Segment, Record<Occasion, number>> = {
+// These are GLOBAL baselines - they do NOT vary by store
+// Variation comes from WHICH segments are in each store's customerProfile
+export const SEGMENT_OCCASION_BASELINE: Record<Segment, Record<Occasion, number>> = {
   "Premium Craft Enthusiasts": {
-    "Weeknight unwind": 18,      // After work craft beer
+    "Weeknight unwind": 16,          // Moderate - more social/special drinking
     "House party": 8,
-    "Family meal": 7,
-    "Barbecue": 5,
-    "Movie night": 11,
-    "Watching sport": 9,
-    "Picnic": 3,
-    "Celebration at home": 15,   // Special occasions
-    "Weekend stock-up": 8,
-    "Having friends over": 16    // Entertaining
+    "Family meal": 6,
+    "Barbecue": 7,
+    "Movie night": 11,               // Social entertainment
+    "Watching sport": 8,
+    "Picnic": 5,
+    "Celebration at home": 18,       // Special occasions with craft beer
+    "Weekend stock-up": 7,
+    "Having friends over": 14        // Entertaining guests
   },
   "Mainstream Family Buyers": {
-    "Weeknight unwind": 9,
-    "House party": 4,
-    "Family meal": 22,           // DOMINANT: family dinners
-    "Barbecue": 6,
-    "Movie night": 16,           // Family movie nights
-    "Watching sport": 8,
-    "Picnic": 2,
-    "Celebration at home": 13,
-    "Weekend stock-up": 14,      // Practical bulk buying
-    "Having friends over": 6
+    "Weeknight unwind": 7,
+    "House party": 5,
+    "Family meal": 27,               // Dominant - family dinners
+    "Barbecue": 8,
+    "Movie night": 17,               // Family entertainment
+    "Watching sport": 9,
+    "Picnic": 4,
+    "Celebration at home": 10,
+    "Weekend stock-up": 11,          // Practical bulk buying
+    "Having friends over": 2
   },
   "Value-Driven Households": {
     "Weeknight unwind": 10,
-    "House party": 3,
+    "House party": 4,
     "Family meal": 11,
-    "Barbecue": 3,
+    "Barbecue": 5,
     "Movie night": 9,
     "Watching sport": 10,
-    "Picnic": 2,
+    "Picnic": 3,
     "Celebration at home": 6,
-    "Weekend stock-up": 26,      // DOMINANT: bulk stock-up
-    "Having friends over": 20    // Affordable entertaining
+    "Weekend stock-up": 26,          // Dominant - bulk buying for value
+    "Having friends over": 16        // Affordable entertaining
   },
   "Social Party Hosts": {
-    "Weeknight unwind": 7,
-    "House party": 24,           // DOMINANT: hosting parties
-    "Family meal": 6,
-    "Barbecue": 8,
-    "Movie night": 9,
-    "Watching sport": 8,
-    "Picnic": 4,
-    "Celebration at home": 18,   // Celebrating
-    "Weekend stock-up": 6,
+    "Weeknight unwind": 9,
+    "House party": 26,               // Dominant - hosting parties
+    "Family meal": 5,
+    "Barbecue": 10,
+    "Movie night": 8,
+    "Watching sport": 7,
+    "Picnic": 5,
+    "Celebration at home": 15,       // Celebrating at home
+    "Weekend stock-up": 5,
     "Having friends over": 10
   },
   "Traditional Real Ale Fans": {
-    "Weeknight unwind": 21,      // DOMINANT: traditional pub-style
-    "House party": 5,
-    "Family meal": 10,
-    "Barbecue": 5,
-    "Movie night": 8,
-    "Watching sport": 18,        // Sports in the pub style
-    "Picnic": 3,
-    "Celebration at home": 9,
-    "Weekend stock-up": 11,
-    "Having friends over": 10
-  },
-  "Student Budget Shoppers": {
-    "Weeknight unwind": 8,
-    "House party": 23,           // DOMINANT: student parties
-    "Family meal": 3,
-    "Barbecue": 4,
-    "Movie night": 14,
-    "Watching sport": 13,
-    "Picnic": 3,
-    "Celebration at home": 5,
-    "Weekend stock-up": 16,      // Budget buying
-    "Having friends over": 11
-  },
-  "Convenience On-The-Go": {
-    "Weeknight unwind": 25,      // DOMINANT: grab and go after work
-    "House party": 6,
-    "Family meal": 5,
-    "Barbecue": 3,
-    "Movie night": 8,
-    "Watching sport": 14,
-    "Picnic": 2,
-    "Celebration at home": 6,
-    "Weekend stock-up": 7,
-    "Having friends over": 24    // Last-minute social
-  },
-  "Occasional Special Buyers": {
-    "Weeknight unwind": 7,
-    "House party": 8,
-    "Family meal": 10,
+    "Weeknight unwind": 20,          // Habitual but not dominant
+    "House party": 4,
+    "Family meal": 12,               // Weekend/mealtime patterns
     "Barbecue": 6,
-    "Movie night": 10,
-    "Watching sport": 7,
-    "Picnic": 5,
-    "Celebration at home": 24,   // DOMINANT: special occasions only
-    "Weekend stock-up": 5,
-    "Having friends over": 18
-  },
-  "Health-Conscious Moderates": {
-    "Weeknight unwind": 16,
-    "House party": 6,
-    "Family meal": 17,           // Healthy family eating
-    "Barbecue": 5,
-    "Movie night": 13,
-    "Watching sport": 7,
-    "Picnic": 8,                 // Outdoor activities
-    "Celebration at home": 11,
-    "Weekend stock-up": 9,
-    "Having friends over": 8
-  },
-  "Sports & Social Drinkers": {
-    "Weeknight unwind": 9,
-    "House party": 11,
-    "Family meal": 6,
-    "Barbecue": 7,
-    "Movie night": 8,
-    "Watching sport": 25,        // DOMINANT: watching sports
+    "Movie night": 7,
+    "Watching sport": 19,            // Sports at the pub
     "Picnic": 3,
     "Celebration at home": 8,
-    "Weekend stock-up": 10,
-    "Having friends over": 13
+    "Weekend stock-up": 13,          // Habitual weekend buying
+    "Having friends over": 8
+  },
+  "Student Budget Shoppers": {
+    "Weeknight unwind": 5,
+    "House party": 30,               // Dominant - student parties
+    "Family meal": 3,
+    "Barbecue": 5,
+    "Movie night": 13,
+    "Watching sport": 14,            // Social sports events
+    "Picnic": 3,
+    "Celebration at home": 4,
+    "Weekend stock-up": 16,          // Budget buying
+    "Having friends over": 7
+  },
+  "Convenience On-The-Go": {
+    "Weeknight unwind": 28,          // Dominant - grab and go after work
+    "House party": 6,
+    "Family meal": 4,
+    "Barbecue": 3,
+    "Movie night": 7,
+    "Watching sport": 13,
+    "Picnic": 2,
+    "Celebration at home": 5,
+    "Weekend stock-up": 6,
+    "Having friends over": 26        // Last-minute social
+  },
+  "Occasional Special Buyers": {
+    "Weeknight unwind": 9,
+    "House party": 9,
+    "Family meal": 10,
+    "Barbecue": 8,
+    "Movie night": 11,
+    "Watching sport": 6,
+    "Picnic": 6,
+    "Celebration at home": 25,       // Dominant - special occasions only
+    "Weekend stock-up": 4,
+    "Having friends over": 12
+  },
+  "Health-Conscious Moderates": {
+    "Weeknight unwind": 17,
+    "House party": 5,
+    "Family meal": 19,               // Healthy family eating
+    "Barbecue": 7,
+    "Movie night": 14,
+    "Watching sport": 6,
+    "Picnic": 10,                    // Outdoor activities
+    "Celebration at home": 11,
+    "Weekend stock-up": 8,
+    "Having friends over": 3
+  },
+  "Sports & Social Drinkers": {
+    "Weeknight unwind": 5,
+    "House party": 15,               // Social events
+    "Family meal": 5,
+    "Barbecue": 9,
+    "Movie night": 7,
+    "Watching sport": 28,            // Dominant - watching sports
+    "Picnic": 4,
+    "Celebration at home": 7,
+    "Weekend stock-up": 9,
+    "Having friends over": 11
   }
 };

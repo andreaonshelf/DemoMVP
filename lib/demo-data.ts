@@ -19,7 +19,7 @@ import type {
   Occasion
 } from '@/types/demo-data';
 
-import { SEGMENT_OCCASION_PREFERENCES, OCCASIONS } from '@/types/demo-data';
+import { SEGMENT_OCCASION_BASELINE, OCCASIONS } from '@/types/demo-data';
 
 // Type assertions (Next.js json imports are typed as 'any')
 const stores = storesData as unknown as Store[];
@@ -162,14 +162,186 @@ export function getMeasureValue(
 }
 
 /**
+ * Detect demographic environment tags from store data
+ */
+function detectDemographicTags(store: Store): string[] {
+  const tags: string[] = [];
+
+  // Student-heavy: age 18-24 >= 18%
+  const age1824 = store.catchmentPopulation.ageDistribution.find(a => a.range === "18-24");
+  if (age1824 && age1824.percentage >= 18) {
+    tags.push("student-heavy");
+  }
+
+  // Affluent: High + Very High income >= 35%
+  const highIncome = store.catchmentPopulation.incomeLevels
+    .filter(i => i.level.includes("High"))
+    .reduce((sum, i) => sum + i.percentage, 0);
+  if (highIncome >= 35) {
+    tags.push("affluent");
+  }
+
+  // Low-income: Low income >= 35%
+  const lowIncome = store.catchmentPopulation.incomeLevels.find(i => i.level.includes("Low"));
+  if (lowIncome && lowIncome.percentage >= 35) {
+    tags.push("low-income");
+  }
+
+  // Family-heavy: age 25-34 + 35-44 >= 28%
+  const familyAge = store.catchmentPopulation.ageDistribution
+    .filter(a => a.range === "25-34" || a.range === "35-44")
+    .reduce((sum, a) => sum + a.percentage, 0);
+  if (familyAge >= 28) {
+    tags.push("family-heavy");
+  }
+
+  // Older: age 55-64 + 65+ >= 25%
+  const olderAge = store.catchmentPopulation.ageDistribution
+    .filter(a => a.range === "55-64" || a.range === "65+")
+    .reduce((sum, a) => sum + a.percentage, 0);
+  if (olderAge >= 25) {
+    tags.push("older");
+  }
+
+  return tags;
+}
+
+/**
+ * Apply demographic tilts to segment-occasion baselines
+ */
+function applyDemographicTilts(
+  store: Store,
+  baselines: Record<Segment, Record<Occasion, number>>
+): Record<Segment, Record<Occasion, number>> {
+  const tags = detectDemographicTags(store);
+  const locationType = store.location_type;
+
+  // Create tilted copy (never mutate baselines)
+  const tilted: Record<Segment, Record<Occasion, number>> = {} as any;
+
+  // For each segment
+  (Object.keys(baselines) as Segment[]).forEach(segment => {
+    // Start with baseline
+    const temp: Record<Occasion, number> = {} as any;
+    OCCASIONS.forEach(occasion => {
+      temp[occasion] = baselines[segment][occasion];
+    });
+
+    // Apply tilts from all applicable tags
+    tags.forEach(tag => {
+      if (tag === "student-heavy") {
+        if (segment === "Student Budget Shoppers") {
+          temp["House party"] = Math.min(40, temp["House party"] + 5);
+          temp["Watching sport"] = Math.min(40, temp["Watching sport"] + 3);
+          temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 2);
+        } else if (segment === "Social Party Hosts") {
+          temp["House party"] = Math.min(40, temp["House party"] + 2);
+        } else if (segment === "Premium Craft Enthusiasts") {
+          temp["House party"] = Math.min(40, temp["House party"] + 1);
+        } else if (segment === "Convenience On-The-Go") {
+          temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 2);
+        }
+      }
+
+      if (tag === "affluent") {
+        if (segment === "Premium Craft Enthusiasts") {
+          temp["Celebration at home"] = Math.min(40, temp["Celebration at home"] + 3);
+          temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 2);
+        } else if (segment === "Health-Conscious Moderates") {
+          temp["Celebration at home"] = Math.min(40, temp["Celebration at home"] + 2);
+          temp["Picnic"] = Math.min(40, temp["Picnic"] + 1);
+        } else if (segment === "Occasional Special Buyers") {
+          temp["Celebration at home"] = Math.min(40, temp["Celebration at home"] + 2);
+        }
+      }
+
+      if (tag === "low-income") {
+        if (segment === "Value-Driven Households") {
+          temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 4);
+          temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 2);
+        } else if (segment === "Student Budget Shoppers") {
+          temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 3);
+        } else if (segment === "Mainstream Family Buyers") {
+          temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 2);
+        }
+      }
+
+      if (tag === "family-heavy") {
+        if (segment === "Mainstream Family Buyers") {
+          temp["Family meal"] = Math.min(40, temp["Family meal"] + 4);
+          temp["Movie night"] = Math.min(40, temp["Movie night"] + 3);
+        } else if (segment === "Health-Conscious Moderates") {
+          temp["Family meal"] = Math.min(40, temp["Family meal"] + 2);
+        } else if (segment === "Value-Driven Households") {
+          temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 2);
+        }
+      }
+
+      if (tag === "older") {
+        if (segment === "Traditional Real Ale Fans") {
+          temp["Weeknight unwind"] = Math.min(40, temp["Weeknight unwind"] + 3);
+          temp["Family meal"] = Math.min(40, temp["Family meal"] + 2);
+        } else if (segment === "Health-Conscious Moderates") {
+          temp["Family meal"] = Math.min(40, temp["Family meal"] + 2);
+          temp["Weeknight unwind"] = Math.min(40, temp["Weeknight unwind"] + 1);
+        }
+      }
+    });
+
+    // Apply location type tilts
+    if (locationType === "Urban") {
+      if (segment === "Convenience On-The-Go") {
+        temp["Weeknight unwind"] = Math.min(40, temp["Weeknight unwind"] + 3);
+        temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 2);
+      } else if (segment === "Premium Craft Enthusiasts") {
+        temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 1);
+      }
+    } else if (locationType === "Suburban") {
+      if (segment === "Mainstream Family Buyers") {
+        temp["Family meal"] = Math.min(40, temp["Family meal"] + 2);
+        temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 1);
+      } else if (segment === "Health-Conscious Moderates") {
+        temp["Family meal"] = Math.min(40, temp["Family meal"] + 1);
+      }
+    } else if (locationType === "Retail park") {
+      if (segment === "Value-Driven Households") {
+        temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 3);
+      } else if (segment === "Mainstream Family Buyers") {
+        temp["Weekend stock-up"] = Math.min(40, temp["Weekend stock-up"] + 2);
+      }
+    } else if (locationType === "Forecourt") {
+      if (segment === "Convenience On-The-Go") {
+        temp["Weeknight unwind"] = Math.min(40, temp["Weeknight unwind"] + 4);
+        temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 2);
+      }
+    } else if (locationType === "Travel hub") {
+      if (segment === "Convenience On-The-Go") {
+        temp["Weeknight unwind"] = Math.min(40, temp["Weeknight unwind"] + 3);
+      } else if (segment === "Student Budget Shoppers") {
+        temp["Having friends over"] = Math.min(40, temp["Having friends over"] + 1);
+      }
+    }
+
+    // Renormalize to 100%
+    const total = OCCASIONS.reduce((sum, occ) => sum + temp[occ], 0);
+    tilted[segment] = {} as any;
+    OCCASIONS.forEach(occasion => {
+      tilted[segment][occasion] = (temp[occasion] / total) * 100;
+    });
+  });
+
+  return tilted;
+}
+
+/**
  * Get usage occasion demand vs coverage
  * (Used in UsageOccasionChart)
  *
  * DEMAND: What usage occasions does the catchment population need?
- * - Based on store's catchment demographics × segment occasion preferences
+ * - Based on store's customerProfile (retailer-adjusted segments) × tilted occasion baselines
  *
  * COVERAGE: What usage occasions does the current assortment serve?
- * - Based on choice_share_by_occasion (aggregate brand shares per occasion)
+ * - Based on SKU availability per occasion
  */
 export function getUsageOccasionData(
   storeId: string
@@ -178,31 +350,35 @@ export function getUsageOccasionData(
   const storePerf = perfByStoreId.get(storeId);
   if (!store || !storePerf) return [];
 
-  // STEP 1: Calculate DEMAND based on customer profile (not geographic catchment)
-  // Use customerProfile which reflects retailer/format capture rates
-  const demandByOccasion: Record<string, number> = {};
+  // STEP 1: Apply demographic tilts to global baselines for this store
+  const tiltedBaselines = applyDemographicTilts(store, SEGMENT_OCCASION_BASELINE);
 
-  // Initialize all occasions to 0
+  // STEP 2: Calculate DEMAND based on customerProfile (beer buyer segments)
+  // CRITICAL: Use customerProfile, NOT catchmentPopulation.demographics (household types)
+  const demandByOccasion: Record<string, number> = {};
   OCCASIONS.forEach(occasion => {
     demandByOccasion[occasion] = 0;
   });
 
-  // Use customerProfile if available, fallback to demographics
-  const profile = store.catchmentPopulation.customerProfile || store.catchmentPopulation.demographics;
+  // Use customerProfile (the 10 beer buyer segments)
+  const customerProfile = store.catchmentPopulation.customerProfile;
+  if (!customerProfile) {
+    console.warn(`Store ${storeId} missing customerProfile - using demographics fallback`);
+    return [];
+  }
 
   // For each segment in the customer profile
-  profile.forEach(demo => {
-    const segmentName = demo.segment as any;
-    const segmentPercentage = demo.percentage; // e.g., 10% of customers
+  customerProfile.forEach(demo => {
+    const segmentName = demo.segment as Segment;
+    const segmentPercentage = demo.percentage;
 
-    // Get this segment's occasion preferences
-    const occasionPrefs = SEGMENT_OCCASION_PREFERENCES[segmentName];
-    if (!occasionPrefs) return;
+    // Get this segment's tilted occasion distribution
+    const occasionDist = tiltedBaselines[segmentName];
+    if (!occasionDist) return;
 
-    // Contribute to each occasion based on segment % × occasion preference
-    Object.entries(occasionPrefs).forEach(([occasion, preference]) => {
-      // E.g., 10% students × 23% house party preference = 2.3 points
-      demandByOccasion[occasion] += (segmentPercentage * preference) / 100;
+    // Contribute to each occasion based on segment % × tilted occasion %
+    Object.entries(occasionDist).forEach(([occasion, percentage]) => {
+      demandByOccasion[occasion] += (segmentPercentage * percentage) / 100;
     });
   });
 
