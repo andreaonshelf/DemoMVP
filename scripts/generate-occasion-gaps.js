@@ -12,6 +12,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { OCCASIONS, SEGMENTS, calculateDemand } = require('./occasion-utils');
 
 // ============= LOAD DATA =============
 const stores = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/stores.json'), 'utf-8'));
@@ -25,32 +26,6 @@ const skus = shopperData.skus;
 console.log(`Loaded ${stores.length} stores, ${assortments.length} assortments, ${skus.length} SKUs`);
 
 // ============= CONSTANTS =============
-const OCCASIONS = [
-  "Weeknight unwind",
-  "House party",
-  "Family meal",
-  "Barbecue",
-  "Movie night",
-  "Watching sport",
-  "Picnic",
-  "Celebration at home",
-  "Weekend stock-up",
-  "Having friends over"
-];
-
-const SEGMENTS = [
-  "Premium Craft Enthusiasts",
-  "Mainstream Family Buyers",
-  "Value-Driven Households",
-  "Social Party Hosts",
-  "Traditional Real Ale Fans",
-  "Student Budget Shoppers",
-  "Convenience On-The-Go",
-  "Occasional Special Buyers",
-  "Health-Conscious Moderates",
-  "Sports & Social Drinkers"
-];
-
 const BRANDS = [
   "Premium Craft Co",
   "Traditional Ales Ltd",
@@ -356,33 +331,9 @@ function generateAssortmentQuality(store, demand) {
   return quality;
 }
 
-/**
- * Calculate demand (usage occasions) for a store
- */
-function calculateDemand(store) {
-  const customerProfile = store.catchmentPopulation.customerProfile || [];
-  const tiltedBaselines = applyDemographicTilts(store, SEGMENT_OCCASION_BASELINE);
-
-  const demand = {};
-  OCCASIONS.forEach(occasion => {
-    let sum = 0;
-    customerProfile.forEach(item => {
-      const segment = item.segment;
-      const percentage = item.percentage;
-      const occasionPct = tiltedBaselines[segment][occasion];
-      sum += (percentage / 100) * (occasionPct / 100);
-    });
-    demand[occasion] = sum * 100; // Convert to percentage
-  });
-
-  // Normalize to 100%
-  const total = OCCASIONS.reduce((sum, occ) => sum + demand[occ], 0);
-  OCCASIONS.forEach(occasion => {
-    demand[occasion] = (demand[occasion] / total) * 100;
-  });
-
-  return demand;
-}
+// calculateDemand is now imported from occasion-utils.js
+// It includes format modulation (Discounter +30% stock-up, Hypermarket +20% family, Convenience +30% quick)
+// and uses the fixed v2 segment-occasion baselines
 
 /**
  * Calculate coverage (assortment-weighted sum of SKU occasion choice shares)
