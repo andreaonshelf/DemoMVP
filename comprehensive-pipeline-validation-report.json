@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-11-25T14:55:02.534Z",
+  "summary": {
+    "total_stores": 515,
+    "total_clusters": 92,
+    "critical_errors": 0,
+    "warnings": 67,
+    "passed_checks": 7
+  },
+  "results": {
+    "traceability": {
+      "status": "PASS",
+      "issues": []
+    },
+    "conservation_of_mass": {
+      "status": "WARN",
+      "avg_deviation": "24.3%",
+      "max_deviation": "200.0%",
+      "issues": [
+        "CLUSTER-1: income_high deviation 33.0%",
+        "CLUSTER-2: income_high deviation 29.8%",
+        "CLUSTER-3: income_high deviation 17.5%",
+        "CLUSTER-4: income_high deviation 32.4%",
+        "CLUSTER-6: income_high deviation 19.0%"
+      ]
+    },
+    "segment_coherence": {
+      "status": "PASS",
+      "coherence_score": "95.7%"
+    },
+    "mission_coherence": {
+      "status": "PASS"
+    },
+    "retailer_positioning": {
+      "status": "PASS",
+      "waitrose_income_wins": "100%",
+      "waitrose_premium_wins": "100%",
+      "aldi_value_wins": "100%"
+    },
+    "context_realism": {
+      "status": "PASS",
+      "transit_correct": "95%",
+      "residential_correct": "94%"
+    },
+    "competition_realism": {
+      "status": "PASS",
+      "avg_hhi": "0.32",
+      "monopolies": 14,
+      "fragmented": 8
+    },
+    "cross_category_coherence": {
+      "status": "WARN",
+      "avg_std_dev": "0.011"
+    },
+    "outlier_detection": {
+      "status": "WARN",
+      "extreme_segments": 8,
+      "weak_stores": 0
+    },
+    "scenario_tests": {
+      "status": "PASS",
+      "premium_transit": "0/4",
+      "discount_residential": "4/22"
+    }
+  },
+  "overall_status": "WARN"
+}

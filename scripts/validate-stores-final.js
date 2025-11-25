@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const stores = JSON.parse(fs.readFileSync(
-  path.join(__dirname, '../data/STORES-FINAL.json'),
+  path.join(__dirname, '../data/1-stores.json'),
   'utf-8'
 ));
 

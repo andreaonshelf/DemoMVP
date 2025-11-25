@@ -16,7 +16,7 @@ function crossValidate() {
   // 1. EXTRACT FROM FILE 1
   // ═════════════════════════════════════════════════════════════════════════
 
-  const storesPath = path.join(__dirname, '../data/STORES-FINAL.json');
+  const storesPath = path.join(__dirname, '../data/1-stores.json');
   const stores = JSON.parse(fs.readFileSync(storesPath, 'utf-8'));
 
   console.log(`Loaded ${stores.length} stores from File 1`);

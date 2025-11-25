@@ -1,0 +1,119 @@
+{
+  "timestamp": "2025-11-25T11:34:01.447Z",
+  "matrices": {
+    "beer_vs_beauty": {
+      "mindful_moderators": {
+        "clean_conscious": 0.265,
+        "prestige_devotees": 0.203,
+        "skintellectuals": 0.242,
+        "glow_chasers": 0.171,
+        "low_maintenance_minimalists": 0.119
+      },
+      "premium_crafters": {
+        "clean_conscious": 0.264,
+        "prestige_devotees": 0.206,
+        "skintellectuals": 0.236,
+        "glow_chasers": 0.163,
+        "low_maintenance_minimalists": 0.13
+      },
+      "social_sessionists": {
+        "clean_conscious": 0.263,
+        "prestige_devotees": 0.197,
+        "skintellectuals": 0.248,
+        "glow_chasers": 0.185,
+        "low_maintenance_minimalists": 0.108
+      },
+      "mainstream_loyalists": {
+        "clean_conscious": 0.251,
+        "prestige_devotees": 0.202,
+        "skintellectuals": 0.195,
+        "glow_chasers": 0.117,
+        "low_maintenance_minimalists": 0.235
+      },
+      "value_seekers": {
+        "clean_conscious": 0.256,
+        "prestige_devotees": 0.2,
+        "skintellectuals": 0.204,
+        "glow_chasers": 0.128,
+        "low_maintenance_minimalists": 0.211
+      }
+    },
+    "beer_vs_home": {
+      "mindful_moderators": {
+        "germ_defenders": 0.227,
+        "clean_living_advocates": 0.282,
+        "sensory_homemakers": 0.243,
+        "family_protectors": 0.158,
+        "functional_pragmatists": 0.09
+      },
+      "premium_crafters": {
+        "germ_defenders": 0.231,
+        "clean_living_advocates": 0.271,
+        "sensory_homemakers": 0.241,
+        "family_protectors": 0.164,
+        "functional_pragmatists": 0.093
+      },
+      "social_sessionists": {
+        "germ_defenders": 0.221,
+        "clean_living_advocates": 0.296,
+        "sensory_homemakers": 0.246,
+        "family_protectors": 0.15,
+        "functional_pragmatists": 0.088
+      },
+      "mainstream_loyalists": {
+        "germ_defenders": 0.262,
+        "clean_living_advocates": 0.193,
+        "sensory_homemakers": 0.212,
+        "family_protectors": 0.211,
+        "functional_pragmatists": 0.122
+      },
+      "value_seekers": {
+        "germ_defenders": 0.259,
+        "clean_living_advocates": 0.205,
+        "sensory_homemakers": 0.216,
+        "family_protectors": 0.202,
+        "functional_pragmatists": 0.118
+      }
+    },
+    "beauty_vs_home": {
+      "clean_conscious": {
+        "germ_defenders": 0.241,
+        "clean_living_advocates": 0.25,
+        "sensory_homemakers": 0.233,
+        "family_protectors": 0.176,
+        "functional_pragmatists": 0.101
+      },
+      "prestige_devotees": {
+        "germ_defenders": 0.242,
+        "clean_living_advocates": 0.246,
+        "sensory_homemakers": 0.233,
+        "family_protectors": 0.178,
+        "functional_pragmatists": 0.101
+      },
+      "skintellectuals": {
+        "germ_defenders": 0.232,
+        "clean_living_advocates": 0.269,
+        "sensory_homemakers": 0.239,
+        "family_protectors": 0.165,
+        "functional_pragmatists": 0.095
+      },
+      "glow_chasers": {
+        "germ_defenders": 0.223,
+        "clean_living_advocates": 0.29,
+        "sensory_homemakers": 0.243,
+        "family_protectors": 0.154,
+        "functional_pragmatists": 0.09
+      },
+      "low_maintenance_minimalists": {
+        "germ_defenders": 0.267,
+        "clean_living_advocates": 0.178,
+        "sensory_homemakers": 0.205,
+        "family_protectors": 0.221,
+        "functional_pragmatists": 0.129
+      }
+    }
+  },
+  "insights": [
+    "beauty_vs_home: prestige_devotees has diffuse correlation (top is clean_living_advocates at only 24.6%)"
+  ]
+}

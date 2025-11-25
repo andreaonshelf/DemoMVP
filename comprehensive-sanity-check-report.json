@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-11-25T11:51:38.388Z",
+  "totalIssues": 4,
+  "checksPassed": [
+    "Demographic-segment correlation",
+    "Context-segment coherence",
+    "Extension propensity reality"
+  ],
+  "issues": [
+    "CLUSTER-13: Office district but office_workers only 14.5%",
+    "CLUSTER-58: Residential+Discounter but residents only 46.7%",
+    "CLUSTER-63: Residential+Discounter but residents only 44.5%",
+    "Discounters have weak lift on value_seekers (-2.7pp)"
+  ],
+  "breakdown": {
+    "archetypeIssues": 3,
+    "correlationIssues": 0,
+    "retailerIssues": 1,
+    "contextIssues": 0,
+    "extensionIssues": 0
+  }
+}

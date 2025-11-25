@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-11-25T12:56:38.462Z",
+  "totalStores": 515,
+  "totalClusters": 92,
+  "sumErrors": 0,
+  "totalIssues": 0,
+  "issues": [],
+  "stats": {
+    "waitroseVsAldiCount": 9,
+    "hypermarketCount": 5,
+    "convenienceCount": 263,
+    "transitCount": 113,
+    "residentialCount": 231,
+    "monopolyCount": 133,
+    "heavyCompetitionCount": 184
+  }
+}

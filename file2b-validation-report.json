@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-11-25T11:33:24.718Z",
+  "valid": true,
+  "errorCount": 0,
+  "warningCount": 6,
+  "errors": [],
+  "warnings": [
+    "extension.home_wellness has low variation (range=0.097). Consider adjusting weights.",
+    "beer.mindful_moderators is never the dominant segment. May be too weak.",
+    "beer.premium_crafters is dominant in 64.1% of clusters. May indicate imbalanced weights.",
+    "beer.value_seekers is never the dominant segment. May be too weak.",
+    "home.germ_defenders is dominant in 60.9% of clusters. May indicate imbalanced weights.",
+    "home.functional_pragmatists is never the dominant segment. May be too weak."
+  ],
+  "stats": {
+    "beer.mindful_moderators": {
+      "min": 0.042,
+      "max": 0.233,
+      "range": 0.191,
+      "mean": 0.122
+    },
+    "beer.premium_crafters": {
+      "min": 0.125,
+      "max": 0.445,
+      "range": 0.32,
+      "mean": 0.295
+    },
+    "beer.social_sessionists": {
+      "min": 0.052,
+      "max": 0.486,
+      "range": 0.434,
+      "mean": 0.19
+    },
+    "beer.mainstream_loyalists": {
+      "min": 0.014,
+      "max": 0.543,
+      "range": 0.529,
+      "mean": 0.265
+    },
+    "beer.value_seekers": {
+      "min": 0.011,
+      "max": 0.241,
+      "range": 0.23,
+      "mean": 0.129
+    },
+    "beauty.clean_conscious": {
+      "min": 0.187,
+      "max": 0.302,
+      "range": 0.115,
+      "mean": 0.26
+    },
+    "beauty.prestige_devotees": {
+      "min": 0.117,
+      "max": 0.304,
+      "range": 0.188,
+      "mean": 0.202
+    },
+    "beauty.skintellectuals": {
+      "min": 0.122,
+      "max": 0.328,
+      "range": 0.206,
+      "mean": 0.224
+    },
+    "beauty.glow_chasers": {
+      "min": 0.05,
+      "max": 0.375,
+      "range": 0.326,
+      "mean": 0.152
+    },
+    "beauty.low_maintenance_minimalists": {
+      "min": 0.006,
+      "max": 0.447,
+      "range": 0.44,
+      "mean": 0.163
+    },
+    "home.germ_defenders": {
+      "min": 0.098,
+      "max": 0.308,
+      "range": 0.21,
+      "mean": 0.241
+    },
+    "home.clean_living_advocates": {
+      "min": 0.092,
+      "max": 0.546,
+      "range": 0.454,
+      "mean": 0.248
+    },
+    "home.sensory_homemakers": {
+      "min": 0.136,
+      "max": 0.292,
+      "range": 0.156,
+      "mean": 0.231
+    },
+    "home.family_protectors": {
+      "min": 0.044,
+      "max": 0.306,
+      "range": 0.262,
+      "mean": 0.178
+    },
+    "home.functional_pragmatists": {
+      "min": 0.024,
+      "max": 0.177,
+      "range": 0.153,
+      "mean": 0.102
+    },
+    "extension.functional_beverages": {
+      "min": 0.686,
+      "max": 0.941,
+      "range": 0.255,
+      "mean": 0.812
+    },
+    "extension.nutraceuticals": {
+      "min": 0.785,
+      "max": 0.923,
+      "range": 0.138,
+      "mean": 0.851
+    },
+    "extension.home_wellness": {
+      "min": 0.831,
+      "max": 0.928,
+      "range": 0.097,
+      "mean": 0.886
+    },
+    "beer_dominant_segment_counts": {
+      "mindful_moderators": 0,
+      "premium_crafters": 59,
+      "social_sessionists": 6,
+      "mainstream_loyalists": 27,
+      "value_seekers": 0
+    },
+    "beauty_dominant_segment_counts": {
+      "clean_conscious": 53,
+      "prestige_devotees": 1,
+      "skintellectuals": 11,
+      "glow_chasers": 6,
+      "low_maintenance_minimalists": 21
+    },
+    "home_dominant_segment_counts": {
+      "germ_defenders": 56,
+      "clean_living_advocates": 30,
+      "sensory_homemakers": 5,
+      "family_protectors": 1,
+      "functional_pragmatists": 0
+    }
+  }
+}

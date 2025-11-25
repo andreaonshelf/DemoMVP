@@ -251,7 +251,7 @@ if (Object.keys(missingFields).length > 0) {
 
 // ============= 7. SAVE CLEANED FILE =============
 
-const outputPath = path.join(__dirname, '../data/STORES-FINAL.json');
+const outputPath = path.join(__dirname, '../data/1-stores.json');
 fs.writeFileSync(outputPath, JSON.stringify(stores, null, 2));
 
 console.log(`\n✅ SAVED: ${outputPath}`);

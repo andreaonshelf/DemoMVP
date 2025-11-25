@@ -148,7 +148,7 @@ function validateClusterPopulation() {
   console.log('═══════════════════════════════════════════════════\n');
 
   // Load stores to get region mapping
-  const storesPath = path.join(__dirname, '../data/STORES-FINAL.json');
+  const storesPath = path.join(__dirname, '../data/1-stores.json');
   const stores = JSON.parse(fs.readFileSync(storesPath, 'utf-8'));
   const clusterToRegion = {};
   stores.forEach(s => {

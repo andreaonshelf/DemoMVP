@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 let stores = JSON.parse(fs.readFileSync(
-  path.join(__dirname, '../data/STORES-FINAL.json'),
+  path.join(__dirname, '../data/1-stores.json'),
   'utf-8'
 ));
 
@@ -247,7 +247,7 @@ console.log(`Supermarket minimum spacing: ${minSuper}m\n`);
 
 // ============= SAVE =============
 
-const outputPath = path.join(__dirname, '../data/STORES-FINAL.json');
+const outputPath = path.join(__dirname, '../data/1-stores.json');
 fs.writeFileSync(outputPath, JSON.stringify(stores, null, 2));
 
 console.log(`✅ SAVED: ${outputPath}`);
