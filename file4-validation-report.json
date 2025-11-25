@@ -1,0 +1,27 @@
+{
+  "timestamp": "2025-11-25T15:11:43.621Z",
+  "totalStores": 515,
+  "criticalErrors": 0,
+  "warnings": 0,
+  "issues": [],
+  "checks": {
+    "normalisation": {
+      "segmentSumErrors": 0,
+      "missionSumErrors": 0,
+      "occasionSumErrors": 0
+    },
+    "retailerPositioning": {
+      "waitroseVsAldi": {
+        "healthConsciousCorrect": true,
+        "everydayDrinkCorrect": true
+      }
+    },
+    "occasionRanges": {
+      "extremeHigh": 0,
+      "extremeLow": 0
+    },
+    "segmentOccasionDetail": {
+      "detailErrors": 0
+    }
+  }
+}
